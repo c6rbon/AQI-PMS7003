@@ -10,7 +10,7 @@ TODO: RBP runs tiny webserver that displays basic metrics.
 ## Parts
 
  * [Raspberry Pi Model 3 A+](https://www.adafruit.com/product/4027)
- * [SD/MicroSD Memory Card (8 GB SDHC)](https://www.adafruit.com/product/1294)
+ * [SD/MicroSD Memory Card - 8 GB SDHC](https://www.adafruit.com/product/1294)
  * [5V 2.5A Switching Power Supply with 20AWG MicroUSB Cable](https://www.adafruit.com/product/1995
  * [Adafruit Raspberry Pi A+ Case - Smoke Base w/ Clear Top](https://www.adafruit.com/product/2359)
  * PMS7003M + G7 Switch Board (I found one that had a bread breakout on it that was convenient) 
