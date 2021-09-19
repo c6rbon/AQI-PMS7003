@@ -1,0 +1,80 @@
+<html>
+
+ <head>
+  <title>AQI</title>
+  <style>
+   
+    
+    html, body { width:100%; height:100%; margin-top: 5em; }
+    
+    canvas {display: inline; width: 100%; }
+
+    #aqi-text{ 	text-align: center; font-size: 10em; font-weight: bold;
+		color: black; font-family: 'Amaranth', sans-serif;
+		
+	     }
+    </style>
+ </head>
+<body>
+</body>
+
+<div id="aqi-meter">
+  <canvas id="canvas-aqi-meter"></canvas>
+  <div id="aqi-text"></div>
+</div>
+
+<script src="gauge.min.js"></script>
+<script type="text/javascript">
+  var opts = {
+      angle: 0.1, // The span of the gauge arc
+      lineWidth: 0.3, // The line thickness
+      radiusScale: 1, // Relative radius
+      pointer: {
+	  length: 0.6, // // Relative to gauge radius
+	  strokeWidth: 0.035, // The thickness
+	  color: '#000000' // Fill color
+      },
+      limitMax: false,     // If false, max value increases automatically if value > maxValue
+      limitMin: true,     // If true, the min value of the gauge will be fixed
+      staticZones: [
+	  {strokeStyle: "#00ff00", min: 0, max: 50}, // green
+	  {strokeStyle: "#ffff00", min: 50, max: 100}, // Yellow
+	  {strokeStyle: "#ff8000", min: 100, max: 150}, // Orange
+	  {strokeStyle: "#ff4000", min: 150, max: 200}, // Red
+	  {strokeStyle: "#880000", min: 200, max: 250},  // Purp-red
+	  {strokeStyle: "#620000", min: 250, max: 400},  // Dark Purple
+      ],
+      staticLabels: {
+	  font: "3em sans-serif",  // Specifies font
+	  labels: [0, 50, 100, 150, 200, 250, 300, 350, 400],  // Print labels at these values
+	  color: "#000000",  // Optional: Label text color
+	  fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+      },
+      generateGradient: true,
+      highDpiSupport: true,     // High resolution support
+      
+  };
+
+  const max_age_seconds = 10
+  var meter_canvas = document.getElementById('canvas-aqi-meter');
+  var aqi_text = document.getElementById('aqi-text'); 
+  var gauge = new Gauge(meter_canvas).setOptions(opts); // create sexy gauge!
+  
+  gauge.setTextField(aqi_text);
+  gauge.maxValue = 400; // set max gauge value
+  gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+  gauge.animationSpeed = 32; // set animation speed (32 is default value)
+  gauge.set(125); // set actual value
+
+
+  async function fetchAQI(url = '') {
+      fetch('./current.json')
+	  .then(response => response.json())
+	  .then(data => gauge.set(data));
+  }
+
+  setInterval(fetchAQI, max_age_seconds * 1000);
+  
+  fetchAQI("");
+  
+</script>
