@@ -4,8 +4,7 @@
 
  * Raspberry Pi reads data from sensor.
  * RBP runs telegraf to feed data into influxdb2.
-
-TODO: RBP runs tiny webserver that displays basic metrics.
+ * RBP runs tiny webserver that displays basic metrics.
 
 ## Parts
 
@@ -71,6 +70,17 @@ sudo apt-get install telegraf
 
 # needed so telegraf can read/write serial device
 sudo usermod -a -G dialout telegraf
+
+sudo apt-get install nginx
+
+# For the web server, we constantly write to a json blob the latest value. Let's be kind to our SD card.
+sudo mkdir /var/www/html/t
+sudo echo "tmpfs  /var/www/html/t tmpfs size=10M,nr_inodes=1k,mode=755,uid=$(id -u telegraf) 0 0" >> /etc/fstab
+sudo mount /var/www/html/t
+
+cp AQI/html/* /var/www/html
+
+
 
 cd
 git clone https://github.com/c6rbon/AQI.git
