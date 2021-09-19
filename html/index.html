@@ -16,6 +16,7 @@
   <div id="aqi-text"></div>
 </div>
 
+<!-- Credit to https://github.com/bernii/gauge.js for this awesome gauge. -->
 <script src="gauge.min.js"></script>
 <script type="text/javascript">
   var opts = {
@@ -57,7 +58,8 @@
   gauge.maxValue = 400; // set max gauge value
   gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
   gauge.animationSpeed = 32; // set animation speed (32 is default value)
-
+  gauge.set(0); // Start at zero
+  
   async function fetchAQI() {
       fetch('current.json')
 	  .then(response => response.json())
