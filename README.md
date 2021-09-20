@@ -1,5 +1,7 @@
 # AQI meter using PMS7003
 
+![Image of AQI Gauge](aqi-example.png)
+
 ## Design
 
  * Raspberry Pi reads data from sensor.
@@ -56,6 +58,9 @@ sudo timedatectl set-timezone America/Los_Angeles
 # This is so it will get its hostname from DHCP
 sudo hostnamectl set-hostname localhost
 
+# edit the 127.0.1.1 mapping from raspberrypi to a better name so you can resolve MY_AQI.local
+sudo vi /etc/hosts
+
 # We're going to use the serial port for the sensor, so disable the serial
 # console.
 sudo raspi-config
@@ -71,6 +76,7 @@ sudo apt-get install telegraf
 # needed so telegraf can read/write serial device
 sudo usermod -a -G dialout telegraf
 
+# our local web server!
 sudo apt-get install nginx
 
 # For the web server, we constantly write to a json blob the latest value. Let's be kind to our SD card.
@@ -79,8 +85,6 @@ sudo echo "tmpfs  /var/www/html/t tmpfs size=10M,nr_inodes=1k,mode=755,uid=$(id 
 sudo mount /var/www/html/t
 
 cp AQI/html/* /var/www/html
-
-
 
 cd
 git clone https://github.com/c6rbon/AQI.git
