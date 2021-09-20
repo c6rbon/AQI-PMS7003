@@ -1,6 +1,7 @@
 # AQI meter using PMS7003
 
 ![Image of AQI Gauge](aqi-example.png)
+![Image of AQI in InfluxDB](influxdb.png)
 
 ## Design
 
