@@ -9,6 +9,8 @@
  * RBP runs telegraf to feed data into influxdb2.
  * RBP runs tiny webserver that displays basic metrics.
 
+Note: It's a wee jank, but the telegraf output script also updates the webserver data. I guess TODO make it a daemon of its own and just have telegraf read from it or something.
+
 ## Parts
 
  * [Raspberry Pi Model 3 A+](https://www.adafruit.com/product/4027)
@@ -47,9 +49,23 @@ psk="Your_KEY"
 touch ssh
 ```
 
-## Setup pi:
+## Setup pi - ssh in as pi/raspberry:
 
 ```
+# needed for telegraf
+curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+echo "deb https://repos.influxdata.com/debian stretch stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+sudo apt-get update
+
+# do the needful
+sudo apt-get upgrade
+
+# telegraf
+sudo apt-get install telegraf
+
+# our local web server!
+sudo apt-get install nginx
+
 # Used for sensor script
 sudo pip3 install pms7003
 
@@ -68,27 +84,19 @@ sudo raspi-config
 # In Interfacing Options > Serial section, disable the serial login shell
 # and enable the serial interface.
 
-# needed for telegraf
-curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
-echo "deb https://repos.influxdata.com/debian stretch stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
-sudo apt-get update
-sudo apt-get install telegraf
-
 # needed so telegraf can read/write serial device
 sudo usermod -a -G dialout telegraf
-
-# our local web server!
-sudo apt-get install nginx
 
 # For the web server, we constantly write to a json blob the latest value. Let's be kind to our SD card.
 sudo mkdir /var/www/html/t
 sudo echo "tmpfs  /var/www/html/t tmpfs size=10M,nr_inodes=1k,mode=755,uid=$(id -u telegraf) 0 0" >> /etc/fstab
 sudo mount /var/www/html/t
 
-cp AQI/html/* /var/www/html
-
 cd
-git clone https://github.com/c6rbon/AQI.git
+git clone https://github.com/c6rbon/AQI-PMS7003.git
+
+# Install the onboard HTML gauge
+cp AQI-PMS7003/html/* /var/www/html
 
 # Edit telegraf.conf with your own influxdb2 credentials, or whatever output
 # you like.
