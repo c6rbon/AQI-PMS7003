@@ -34,7 +34,7 @@ update_config=1
 ctrl_interface=/var/run/wpa_supplicant
 network={
 ssid="Your_SSID"
-psk="Your_SSID"
+psk="Your_KEY"
 }
 
 ```
