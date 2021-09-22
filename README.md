@@ -6,8 +6,8 @@
 ## Design
 
  * Raspberry Pi reads data from sensor.
- * RBP runs telegraf to feed data into influxdb2.
- * RBP runs tiny webserver that displays basic metrics.
+ * RPi runs telegraf to feed data into influxdb2.
+ * RPi runs tiny webserver that displays basic metrics.
 
 Note: It's a wee jank, but the telegraf output script also updates the webserver data. I guess TODO make it a daemon of its own and just have telegraf read from it or something.
 
